@@ -21,9 +21,6 @@ class VTubeStudioHandler:
         self.vtuber_service = VtuberService()
         self.token = ''
 
-    async def fff(self):
-        t = await self.call_vtube_api(json.dumps(token_create_request))
-
     async def connect(self, websocket):
         self.clients.add(websocket)
         print(self.clients)
@@ -32,18 +29,15 @@ class VTubeStudioHandler:
         self.clients.remove(websocket)
 
     async def handle_message(self, websocket, message):
-        # print(f"하하하 : {message}")
-        t = await self.call_vtube_api(json.dumps(message))
-
-        return t
+        pass
     
-    async def call_vtube_api(self, message):
-        print(message)
+    async def call_vtube_api(self):
+        request_message = json.dumps(token_create_request)
 
         # VTube Studio API의 실제 엔드포인트 URL로 대체해야 합니다.
         vtube_api_url = "ws://localhost:8001"
         async with websockets.connect(vtube_api_url) as websocket:
-            await websocket.send(message)
+            await websocket.send(request_message)
             response = await websocket.recv()
             print(f"response : {response}")
             return response
